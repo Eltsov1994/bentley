@@ -1,0 +1,30 @@
+$track: tranparent; // Пустота
+$thumb: rgba(255, 255, 255, 0.3); // Полоса
+$thumbHover: black;
+$scrollbarWidth: 7px; // Ширина полоски
+::-webkit-scrollbar {
+   width: $scrollbarWidth;
+   &-button {
+      background-image: url("");
+      background-repeat: no-repeat;
+      width: 5px;
+      height: 0px;
+   }
+   &-track {
+      background-color: $track;
+   }
+   &-thumb {
+      border-radius: 10px;
+      background-color: $thumb;
+      &:hover {
+         background-color: $thumbHover;
+      }
+   }
+}
+
+::-webkit-resizer {
+   background-image: url("");
+   background-repeat: no-repeat;
+   width: 4px;
+   height: 0px;
+}

@@ -1,0 +1,161 @@
+//Подключение шрифта
+@mixin font($font_name, $file_name, $weight, $style) {
+	@font-face {
+		font-family: $font_name;
+		font-display: swap;
+		src: url("../fonts/#{$file_name}.woff") format("woff"), url("../fonts/#{$file_name}.woff2") format("woff2");
+		font-weight: #{$weight};
+		font-style: #{$style};
+	}
+}
+
+//Адаптивный шрифт
+@mixin adaptiv-font($pcSize, $mobSize, $maxSize) {
+	$addSize: $pcSize - $mobSize;
+	@if $maxSize==1 {
+		//Только если меньше контейнера
+		font-size: $pcSize + px;
+		@media (max-width: #{$maxWidthContainer + px}) {
+			font-size: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidthContainer - 320}));
+		}
+	} @else if $maxSize==2 {
+		//Только если больше контейнера
+		font-size: $pcSize + px;
+		@media (min-width: #{$maxWidthContainer + px}) {
+			font-size: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth - 320}));
+		}
+	} @else {
+		//Всегда
+		font-size: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth - 320}));
+	}
+}
+
+//Адаптивный отступ
+@mixin adaptiv-value($indentType, $pcSize, $mobSize, $maxSize) {
+	$addSize: $pcSize - $mobSize;
+	@if $maxSize==1 {
+		//Только если меньше контейнера
+		#{$indentType}: $pcSize + px;
+		@media (max-width: #{$maxWidthContainer + px}) {
+			#{$indentType}: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidthContainer - 320}));
+		}
+	} @else if $maxSize==2 {
+		//Только если больше контейнера
+		#{$indentType}: $pcSize + px;
+		@media (min-width: #{$maxWidthContainer + px}) {
+			#{$indentType}: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth - 320}));
+		}
+	} @else {
+		//Всегда
+		#{$indentType}: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth - 320}));
+	}
+}
+
+@mixin responsive($indentType, $maxSize, $pcSize, $mobSize) {
+	$addSize: $maxSize - $mobSize;
+	$addSize1: $maxSize - $pcSize;
+	$addSize2: $pcSize - $mobSize;
+
+	@if $pcSize==0 {
+		#{$indentType}: $maxSize + px;
+		@media (max-width: #{$maxWidthContainer + px}) {
+			#{$indentType}: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidthContainer - 320}));
+		}
+	} @else {
+		#{$indentType}: $maxSize + px;
+		@media (max-width: #{$maxWidthContainer + px}) {
+			#{$indentType}: calc(#{$pcSize + px} + #{$addSize1} * ((100vw - #{$mdD + px}) / #{$maxWidthContainer - $mdD}));
+		}
+		@media (max-width: #{$mdD + px}) {
+			#{$indentType}: calc(#{$mobSize + px} + #{$addSize2} * ((100vw - 320px) / #{$maxWidthContainer - 320}));
+		}
+	}
+}
+
+@mixin responsiveUser($indentType, $minSize, $maxSize, $minScreen) {
+	$addSize: $maxSize - $minSize;
+	#{$indentType}: $maxSize + px;
+	@media (max-width: #{$maxWidthContainer + px}) {
+		#{$indentType}: calc(
+			#{$minSize + px} + #{$addSize} * ((100vw - #{$minScreen + px}) / #{$maxWidthContainer - $minScreen})
+		);
+	}
+}
+
+@function pxResponsive($f-min, $f-max) {
+	$k: ($f-max - $f-min)/ ($maxWidth - 320);
+	$b: $f-min - $k * 320;
+
+	$b: $b * 1px;
+
+	@return calc(#{$k} * 100vw + #{$b});
+}
+
+//До планшетов
+@function pxResponsive_2($f-min, $f-max) {
+	$k: ($f-max - $f-min)/ ($maxWidth - $md3);
+	$b: $f-min - $k * $md3;
+
+	$b: $b * 1px;
+
+	@return calc(#{$k} * 100vw + #{$b});
+}
+
+//??????????????????????????????????????????????
+@mixin shine($color) {
+	@if $color== "black" {
+		color: rgba(236, 228, 228, 0.9);
+		background: -webkit-gradient(linear, left top, right top, from(#0e0d0d), to(#101010), color-stop(0.5, #f7f3f3));
+		background-size: 10% 100%;
+		-webkit-background-clip: text;
+		-moz-background-clip: text;
+		animation: shimmer 1.5s;
+		background-repeat: no-repeat;
+		background-position: -10% 0;
+		background-color: #1d1b1b;
+	}
+	@if $color== "white" {
+		color: rgba(255, 255, 255, 0.1);
+		background: -webkit-gradient(
+			linear,
+			left top,
+			right top,
+			from(transparent),
+			to(#f7f3f3),
+			color-stop(transparent)
+		);
+		background-size: 10% 100%;
+		-webkit-background-clip: text;
+		-moz-background-clip: text;
+		animation: shimmer 1.5s;
+		background-repeat: no-repeat;
+		background-position: -10% 0;
+		background-color: #fff;
+	}
+}
+
+@mixin rubberHeight($height) {
+	&:after {
+		content: "";
+		padding-top: #{$height};
+		float: left;
+	}
+}
+
+@mixin logoWhite {
+	.logo-main__white {
+		display: block;
+	}
+	.logo-main__black {
+		display: none;
+	}
+}
+
+@mixin logoBlack {
+	.logo-main__white {
+		display: none;
+	}
+	.logo-main__black {
+		display: block;
+	}
+}
